@@ -6,20 +6,28 @@ In this problem, you are going to implement a WSD system by using two different 
 It describes one lexical element: future (part-of-speech is noun) with its four different senses. Each sense has its own gloss (definition) and examples that are separated by j symbol. Each sense is also associated with the corresponding senses of WordNet 2.1. As our sense divisions and WordNet's are not identical, some of our senses could be mapped to multiple WordNet senses or possibly nothing (e.g., See the fourth sense item in the above example). Since the current NLTK is using WordNet 3, the sense mapping from 2.1 to 3.x could be useful https://stackoverflow.com/questions/46950379/how-to-fetch-a-specific-version-of-wordnet-when-doing-nltk-download
 
 The training data specifies the correct sense of the target word providing its verbal context surrounding the target word. Each line of training data has the the following format: word.pos | sense-id | prev-context %% target %% next-context
+
  word is the original form of the target word for which we are to predict the sense. You will use it to lookup the XML dictionary.
+
  pos is the POS where `n', `v', and `a' stand for noun, verb, and adjective, respectively.
+
  sense-id is the integer number for the correct sense id defined in our dictionary.
+
  prev-context is the text given earlier than each of the target word occurrence.
+
  target is the actual occurrence of the target word. Note that the word \begin.v" could occur as \beginning" instead of \begin" to denote a participle at the given position.
+
  next-context is the text given later than each of the target word occurrence.
 
 Note that sense-ids in the test data are all erased to 0 as those are what you should predict.
 
 1 Ontological (dictionary-based) WSD
 Dictionary-based approaches utilize definitions given in the dictionary. See the following example that tries to disambiguate "pine cone".
+
  pine (the context)
 1. a kind of evergreen tree with needle-shaped leaves
 2. to waste away through sorrow or illness
+
  cone (the target word)
 1. A solid body which narrows to a point
 2. Something of this shape, whether solid or hollow
@@ -34,7 +42,7 @@ dictionary-based system in combining with the metric you designed above.
 
 2 Supervised WSD
 
-The performance of your WSD system would rely more on how to generate feature vectors from the context. Note that target words are always provided within sufficiently long sentence(s). As the above example shows, extracting informative words from surrounding context allows the model parameters to discriminate unlikely senses from the correct sense. In our model, this process of deciding model parameters becomes training. You have to train a separate model per each target word in the training data.
+2. The performance of your WSD system would rely more on how to generate feature vectors from the context. Note that target words are always provided within sufficiently long sentence(s). As the above example shows, extracting informative words from surrounding context allows the model parameters to discriminate unlikely senses from the correct sense. In our model, this process of deciding model parameters becomes training. You have to train a separate model per each target word in the training data.
 
 3. When initially training your model, make sure that you never use the validation/test data. Note that the correct sense-ids given in the test data are deliberately erased to 0, which means those are no longer true labels. Instead of marking the predicted senses directly on the testing file, you must generate a separate output file consisting only of the predicted sense-ids, one id per line in each test data.
 
